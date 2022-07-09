@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(PrjectDir)\$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(PrjectDir)\$(Configuration)_$(Platform)\Interm\</IntDir>
+    <OutDir>$(ProjectDir)\$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)\$(Configuration)_$(Platform)\Interm\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(PrjectDir)\$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(PrjectDir)\$(Configuration)_$(Platform)\Interm\</IntDir>
+    <OutDir>$(ProjectDir)\$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)\$(Configuration)_$(Platform)\Interm\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
