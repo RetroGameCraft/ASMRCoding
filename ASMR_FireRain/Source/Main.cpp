@@ -1,12 +1,7 @@
 #include "ColorPalette.h"
+#include "Random.h"
+#include "Canvas.h"
 #include <vector>
-
-UINT _canvasWidth{};
-UINT _canvasHeight{};
-
-float random01() { return rand() / (float)RAND_MAX; }
-float randomRange(float minVal, float maxVal) { float t = random01(); return minVal + (maxVal - minVal) * t; }
-UINT randomRange(UINT minVal, UINT maxVal) { float t = random01(); return (UINT)((float)minVal + (float)(maxVal - minVal) * t); }
 
 struct Timer
 {
@@ -67,16 +62,16 @@ struct FireRain
 {
 	void init()
 	{
-		fireStrips.resize(_canvasWidth / FireStrip::tileSize + 1);
-		UINT maxNumTiles = (UINT)((_canvasHeight / FireStrip::tileSize) * 0.7f);
+		fireStrips.resize(_canvas->getWidth() / FireStrip::tileSize + 1);
+		UINT maxNumTiles = (UINT)((_canvas->getHeight() / FireStrip::tileSize) * 0.7f);
 
 		UINT numStrips = (UINT)fireStrips.size();
 		for (UINT stripIndex = 0; stripIndex < numStrips; ++stripIndex)
 		{
 			fireStrips[stripIndex].headPos = Vector2(stripIndex * (float)FireStrip::tileSize + (float)(FireStrip::tileSize * 0.5f), -(float)(FireStrip::tileSize * 0.5f));
-			fireStrips[stripIndex].speed = randomRange(FireStrip::minSpeed, FireStrip::maxSpeed);
+			fireStrips[stripIndex].speed = Random::range(FireStrip::minSpeed, FireStrip::maxSpeed);
 
-			UINT numTiles = randomRange(FireStrip::minNumTiles, maxNumTiles);
+			UINT numTiles = Random::range(FireStrip::minNumTiles, maxNumTiles);
 			fireStrips[stripIndex].tiles.resize(numTiles);
 			for (UINT tileIndex = 0; tileIndex < numTiles; ++tileIndex)
 			{
@@ -95,7 +90,7 @@ struct FireRain
 		{
 			strip.headPos.y += strip.speed * _timer.elapsedTime;
 			float tailPosY = strip.headPos.y - (float)(((UINT)strip.tiles.size() - 1) * FireStrip::tileSize);
-			if ((tailPosY - (FireStrip::tileSize * 0.5f) > _canvasHeight))
+			if ((tailPosY - (FireStrip::tileSize * 0.5f) > _canvas->getHeight()))
 				strip.headPos.y = -(float)(FireStrip::tileSize * 0.5f);
 		}
 	}
@@ -105,27 +100,13 @@ struct FireRain
 
 FireRain _fireRain{};
 
-LRESULT CALLBACK windowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	WNDCLASS wc{};
-	wc.lpfnWndProc = windowProc;
-	wc.lpszClassName = TEXT("Fire Rain");
-	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	wc.style = CS_HREDRAW | CS_VREDRAW;
-	RegisterClass(&wc);
-
-	_canvasWidth = (UINT)GetSystemMetrics(SM_CXSCREEN);
-	_canvasHeight = (UINT)GetSystemMetrics(SM_CYSCREEN);
-	HWND hWnd = CreateWindowEx(0, wc.lpszClassName, wc.lpszClassName, WS_POPUP,
-		0, 0, _canvasWidth, _canvasHeight, NULL, NULL, NULL, nullptr);
+	_canvas = new Canvas();
+	if (!_canvas->initialize()) return 0;
 
 	_timer.init();
 	_fireRain.init();
-
-	ShowWindow(hWnd, SW_NORMAL);
-	UpdateWindow(hWnd);
 
 	MSG msg{};
 	while (true)
@@ -140,62 +121,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		else
 		{
 			_timer.tick();
+			_canvas->clear();
 			_fireRain.update();
-
-			InvalidateRect(hWnd, NULL, FALSE);
-			UpdateWindow(hWnd);
+			_canvas->present();
 		}
 	}
+
+	delete _canvas;
 
 	return (int)msg.wParam;
-}
-
-LRESULT CALLBACK windowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	HDC hdc{};
-	PAINTSTRUCT ps{};
-	UINT stripIndex{};
-	UINT numFireStrips = (UINT)_fireRain.fireStrips.size();
-
-	switch (msg)
-	{
-	case WM_DESTROY:
-
-		PostQuitMessage(0);
-		return 0;
-
-	case WM_KEYDOWN:
-
-		if (wParam == VK_ESCAPE) SendMessage(hWnd, WM_CLOSE, 0, 0);
-		return 0;
-
-	case WM_PAINT:
-
-		hdc = BeginPaint(hWnd, &ps);
-
-		for (stripIndex = 0; stripIndex < numFireStrips; ++stripIndex)
-		{
-			FireStrip* fireStrip = &_fireRain.fireStrips[stripIndex];
-			UINT numTiles = (UINT)fireStrip->tiles.size();
-			for (UINT tileIndex = 0; tileIndex < numTiles; ++tileIndex)
-			{
-				int xPos = (int)fireStrip->headPos.x;
-				int yPos = (int)(fireStrip->headPos.y - tileIndex * FireStrip::tileSize);
-				int left = xPos - (int)(FireStrip::tileSize * 0.5f);
-				int top = yPos - (int)(FireStrip::tileSize * 0.5f);
-				int right = xPos + (int)(FireStrip::tileSize * 0.5f);
-				int bottom = yPos + (int)(FireStrip::tileSize * 0.5f);
-				HBRUSH brushOut = (HBRUSH)SelectObject(hdc, fireStrip->tiles[tileIndex].brush);
-				Rectangle(hdc, left, top, right, bottom);
-				SelectObject(hdc, brushOut);
-			}
-		}
-
-		EndPaint(hWnd, &ps);
-		return 0;
-
-	default:
-
-		return DefWindowProc(hWnd, msg, wParam, lParam);
-	}
 }
