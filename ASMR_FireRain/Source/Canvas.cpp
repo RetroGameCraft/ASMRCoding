@@ -1,6 +1,6 @@
 #include "Canvas.h"
 
-Canvas* _canvas = nullptr;
+Canvas* _canvas{};
 
 Canvas::~Canvas()
 {

@@ -2,54 +2,14 @@
 #include "Random.h"
 #include "Canvas.h"
 #include <vector>
-
-struct Timer
-{
-	void init()
-	{
-		QueryPerformanceFrequency((LARGE_INTEGER*)&freq);
-		QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
-		prevTime = currentTime;
-		toSeconds = 1.0f / (float)freq;
-	}
-
-	void tick()
-	{
-		QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
-		elapsedTime = (currentTime - prevTime) * toSeconds;
-		prevTime = currentTime;
-	}
-
-	__int64 freq{};
-	__int64 prevTime{};
-	__int64 currentTime{};
-	float elapsedTime;
-	float toSeconds{};
-};
-
-Timer _timer{};
-
-struct Vector2
-{
-	Vector2() {}
-	Vector2(float _x, float _y) : x(_x), y(_y) {}
-
-	float x{}, y{};
-};
-
-struct FireTile
-{
-	~FireTile()
-	{
-		if (brush) DeleteObject(brush);
-	}
-	HBRUSH brush{};
-};
+#include "Timer.h"
+#include "FireRain.h"
 
 struct FireStrip
 {
-	Vector2 headPos{};
-	std::vector<FireTile> tiles{};
+	float headPosX{};
+	float headPosY{};
+	//std::vector<FireTile> tiles{};
 	float speed;
 
 	inline static const float minSpeed = 200.0f;
@@ -58,6 +18,7 @@ struct FireStrip
 	inline static const UINT tileSize = 32;
 };
 
+/*
 struct FireRain
 {
 	void init()
@@ -88,7 +49,7 @@ struct FireRain
 	{
 		for (auto& strip : fireStrips)
 		{
-			strip.headPos.y += strip.speed * _timer.elapsedTime;
+			strip.headPos.y += strip.speed * _timer->elapsedTime;
 			float tailPosY = strip.headPos.y - (float)(((UINT)strip.tiles.size() - 1) * FireStrip::tileSize);
 			if ((tailPosY - (FireStrip::tileSize * 0.5f) > _canvas->getHeight()))
 				strip.headPos.y = -(float)(FireStrip::tileSize * 0.5f);
@@ -96,17 +57,18 @@ struct FireRain
 	}
 
 	std::vector<FireStrip> fireStrips{};
-};
-
-FireRain _fireRain{};
+};*/
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	_timer = new Timer();
+	if (!_timer->initialize()) return 0;
+
 	_canvas = new Canvas();
 	if (!_canvas->initialize()) return 0;
 
-	_timer.init();
-	_fireRain.init();
+	_fireRain = new FireRain();
+	if (!_fireRain->initialize()) return 0;
 
 	MSG msg{};
 	while (true)
@@ -120,14 +82,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 		else
 		{
-			_timer.tick();
+			_timer->tick();
 			_canvas->clear();
-			_fireRain.update();
+			_fireRain->update();
+			_fireRain->draw();
 			_canvas->present();
 		}
 	}
 
+	delete _fireRain;
 	delete _canvas;
+	delete _timer;
 
 	return (int)msg.wParam;
 }

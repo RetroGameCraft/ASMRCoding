@@ -13,6 +13,12 @@
     <ClCompile Include="Source\Canvas.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Timer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FireRain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ColorPalette.h">
@@ -22,6 +28,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\Canvas.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Timer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FireRain.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
