@@ -21,9 +21,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ColorPalette.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Random.h">
       <Filter>Source</Filter>
     </ClInclude>

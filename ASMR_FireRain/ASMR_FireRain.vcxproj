@@ -144,7 +144,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Canvas.h" />
-    <ClInclude Include="Source\ColorPalette.h" />
     <ClInclude Include="Source\FireRain.h" />
     <ClInclude Include="Source\Random.h" />
     <ClInclude Include="Source\Timer.h" />
