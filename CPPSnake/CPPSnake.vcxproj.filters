@@ -5,9 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Docs">
-      <UniqueIdentifier>{e134a776-c6ca-425e-9965-ba3073aafffd}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core.h">
@@ -66,10 +63,5 @@
     <ClCompile Include="Source\ResetSequence.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Docs\ToDo.txt">
-      <Filter>Docs</Filter>
-    </Text>
   </ItemGroup>
 </Project>
