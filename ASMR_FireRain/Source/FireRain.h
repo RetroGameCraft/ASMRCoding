@@ -15,6 +15,8 @@ public:
 	
 	void setTileGapsEnabled(bool enabled) { _tileGapsEnabled = enabled; }
 
+	BOOL getTileGapsEnabled() const { return _tileGapsEnabled; }
+
 private:
 
 	struct FireStrip

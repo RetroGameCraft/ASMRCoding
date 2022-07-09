@@ -21,6 +21,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		{
 			if (msg.message == WM_QUIT) break;
 
+			if (msg.message == WM_KEYDOWN && msg.wParam == VK_SPACE)
+				_fireRain->setTileGapsEnabled(!_fireRain->getTileGapsEnabled());
+
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
