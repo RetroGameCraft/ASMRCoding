@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{0b09922f-3907-4b3c-a279-61ac103196a2}</ProjectGuid>
-    <RootNamespace>ASMRFireRain</RootNamespace>
+    <RootNamespace>FireRain</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
