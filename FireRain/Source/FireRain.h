@@ -68,8 +68,10 @@ private:
 		RGB(239, 239, 199),
 		RGB(255, 255, 255)
 	};
+
 	HBRUSH _fireBrushes[37]{};
 	HPEN _fireTilePen{};
+
 	bool _tileGapsEnabled{};
 	std::vector<FireStrip> _fireStrips{};
 
