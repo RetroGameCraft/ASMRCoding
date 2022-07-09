@@ -1,6 +1,7 @@
 #pragma once
 #include "Canvas.h"
 #include "Timer.h"
+#include <vector>
 
 class FireRain
 {
@@ -13,6 +14,14 @@ public:
 	void draw();
 
 private:
+
+	struct FireStrip
+	{
+		float headPosX{};
+		float headPosY{};
+		float speed{};
+		std::vector<HBRUSH> tiles{};
+	};
 
 	const UINT _numFireColors = 37;
 	const COLORREF _fireColors[37] =
@@ -56,6 +65,12 @@ private:
 		RGB(255, 255, 255)
 	};
 	HBRUSH _fireBrushes[37]{};
+	std::vector<FireStrip> _fireStrips{};
+
+	inline static const float _minFallSpeed = 200.0f;
+	inline static const float _maxFallSpeed = 300.0f;
+	inline static const UINT _minNumFireTiles = 10;
+	inline static const UINT _fireTileSize = 32;
 };
 
 extern FireRain* _fireRain;
