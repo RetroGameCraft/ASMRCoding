@@ -26,6 +26,7 @@ bool FireRain::initialize()
 
 	_fireStrips.resize(_canvas->getWidth() / _fireTileSize + 1);
 	UINT maxNumFireTiles = (UINT)((_canvas->getHeight() / _fireTileSize) * 0.7f);
+	if (maxNumFireTiles <= _minNumFireTiles) maxNumFireTiles = _minNumFireTiles + 1;
 
 	UINT numStrips = (UINT)_fireStrips.size();
 	for (UINT stripIndex = 0; stripIndex < numStrips; ++stripIndex)
@@ -39,8 +40,7 @@ bool FireRain::initialize()
 		for (UINT tileIndex = 0; tileIndex < numTiles; ++tileIndex)
 		{
 			UINT colorIndex = _numFireColors - 1 - (UINT)((tileIndex / (float)(numTiles - 1)) * (float)(_numFireColors - 1));
-			lb.lbColor = _fireColors[colorIndex];
-			_fireStrips[stripIndex].tiles[tileIndex] = CreateBrushIndirect(&lb);
+			_fireStrips[stripIndex].tiles[tileIndex] = _fireBrushes[colorIndex];
 			if (!_fireStrips[stripIndex].tiles[tileIndex]) return false;
 		}
 	}

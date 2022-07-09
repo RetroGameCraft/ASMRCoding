@@ -69,8 +69,8 @@ private:
 
 	inline static const float _minFallSpeed = 200.0f;
 	inline static const float _maxFallSpeed = 300.0f;
-	inline static const UINT _minNumFireTiles = 10;
-	inline static const UINT _fireTileSize = 32;
+	inline static const UINT _minNumFireTiles = 20;
+	inline static const UINT _fireTileSize = 12;
 };
 
 extern FireRain* _fireRain;
