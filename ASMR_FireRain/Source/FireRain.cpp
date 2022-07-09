@@ -6,6 +6,8 @@ FireRain* _fireRain{};
 
 FireRain::~FireRain()
 {
+	if (_fireTilePen) DeleteObject(_fireTilePen);
+
 	for (UINT i = 0; i < _numFireColors; ++i)
 	{
 		if (_fireBrushes[i]) DeleteObject(_fireBrushes[i]);
@@ -14,6 +16,11 @@ FireRain::~FireRain()
 
 bool FireRain::initialize()
 {
+	LOGPEN lp{};
+	lp.lopnStyle = PS_NULL;
+	_fireTilePen = CreatePenIndirect(&lp);
+	if (!_fireTilePen) return false;
+
 	LOGBRUSH lb{};
 	lb.lbStyle = BS_SOLID;
 
@@ -62,6 +69,9 @@ void FireRain::update()
 void FireRain::draw()
 {
 	HDC hdc = _canvas->getDrawDC();
+	HPEN penOut = (HPEN)SelectObject(hdc, _fireTilePen);
+	int tileSizeAdd = _tileGapsEnabled ? 0 : 1;
+
 	UINT numStrips = (UINT)_fireStrips.size();
 	for (UINT stripIndex = 0; stripIndex < numStrips; ++stripIndex)
 	{
@@ -72,13 +82,15 @@ void FireRain::draw()
 			float x = strip->headPosX;
 			float y = strip->headPosY - tileIndex * (float)(_fireTileSize);
 			int left = (int)(x - (float)(_fireTileSize * 0.5f));
-			int right = left + _fireTileSize;
+			int right = left + _fireTileSize + tileSizeAdd;
 			int top = (int)(y - (float)(_fireTileSize * 0.5f));
-			int bottom = top + _fireTileSize;
+			int bottom = top + _fireTileSize + tileSizeAdd;
 
 			HBRUSH brushOut = (HBRUSH)SelectObject(hdc, strip->tiles[tileIndex]);
 			Rectangle(hdc, left, top, right, bottom);
 			SelectObject(hdc, brushOut);
 		}
 	}
+
+	SelectObject(hdc, penOut);
 }

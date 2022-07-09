@@ -12,6 +12,8 @@ public:
 	bool initialize();
 	void update();
 	void draw();
+	
+	void setTileGapsEnabled(bool enabled) { _tileGapsEnabled = enabled; }
 
 private:
 
@@ -65,12 +67,14 @@ private:
 		RGB(255, 255, 255)
 	};
 	HBRUSH _fireBrushes[37]{};
+	HPEN _fireTilePen{};
+	bool _tileGapsEnabled{};
 	std::vector<FireStrip> _fireStrips{};
 
 	inline static const float _minFallSpeed = 200.0f;
 	inline static const float _maxFallSpeed = 300.0f;
 	inline static const UINT _minNumFireTiles = 20;
-	inline static const UINT _fireTileSize = 12;
+	inline static const UINT _fireTileSize = 10;
 };
 
 extern FireRain* _fireRain;
