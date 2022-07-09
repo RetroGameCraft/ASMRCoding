@@ -1,7 +1,5 @@
-#include "ColorPalette.h"
 #include "Random.h"
 #include "Canvas.h"
-#include <vector>
 #include "Timer.h"
 #include "FireRain.h"
 

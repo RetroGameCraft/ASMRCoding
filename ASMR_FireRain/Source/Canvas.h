@@ -14,6 +14,7 @@ public:
 
 	UINT getWidth() const { return _width; }
 	UINT getHeight() const { return _height; }
+	HDC getDrawDC() const { return _backbufferDC; }
 
 private:
 

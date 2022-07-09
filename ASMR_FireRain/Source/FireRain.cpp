@@ -61,4 +61,24 @@ void FireRain::update()
 
 void FireRain::draw()
 {
+	HDC hdc = _canvas->getDrawDC();
+	UINT numStrips = (UINT)_fireStrips.size();
+	for (UINT stripIndex = 0; stripIndex < numStrips; ++stripIndex)
+	{
+		FireStrip* strip = &_fireStrips[stripIndex];
+		UINT numTiles = (UINT)strip->tiles.size();
+		for (UINT tileIndex = 0; tileIndex < numTiles; ++tileIndex)
+		{
+			float x = strip->headPosX;
+			float y = strip->headPosY - tileIndex * (float)(_fireTileSize);
+			int left = (int)(x - (float)(_fireTileSize * 0.5f));
+			int right = left + _fireTileSize;
+			int top = (int)(y - (float)(_fireTileSize * 0.5f));
+			int bottom = top + _fireTileSize;
+
+			HBRUSH brushOut = (HBRUSH)SelectObject(hdc, strip->tiles[tileIndex]);
+			Rectangle(hdc, left, top, right, bottom);
+			SelectObject(hdc, brushOut);
+		}
+	}
 }
